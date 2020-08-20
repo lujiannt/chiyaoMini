@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.sys.modular.demo.mapper.DemoMapper">
+    <select id="customPageList" resultType="cn.stylefeng.guns.sys.modular.demo.entity.Demo" parameterType="cn.stylefeng.guns.sys.modular.demo.entity.Demo">
+		SELECT * FROM test_demo
+		WHERE 1 = 1
+		<if test="param.name != null and param.name != ''">
+			AND name LIKE CONCAT('%',#{param.name},'%')
+		</if>
+	</select>
+
+	<delete id="delete">
+		DELETE FROM test_demo
+	</delete>
+</mapper>

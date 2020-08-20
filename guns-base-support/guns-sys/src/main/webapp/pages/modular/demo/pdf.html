@@ -1,0 +1,59 @@
+@layout("/common/_container.html",{js:["/assets/modular/demo/pdf.js"]}){
+<style type="text/css" href="${ctxPath}/assets/common/js/demo/drag/css/style.css"></style>
+<div class="layui-body-header">
+    <span class="layui-body-header-title">demo</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">文件</label>
+                            <div class="layui-input-block">
+                                <input id="fileInputHidden" name="fileInputHidden" type="hidden" class="layui-input"/>
+                                <div style="float: left;">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="fileBtn"><i
+                                            class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div style="float: left;">
+                                    <span class="layui-inline layui-upload-choose" style="padding: 4px 10px;"
+                                          id="fileNameTip"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary " id="pdfDown" >PDf导出</button>
+                        <div class='drag-box drag-box-3 pdfDiv' id="pdfDiv">
+                            <div class='drag drag-3'><img src="/assets/common/js/demo/drag/img/08.jpg" style="height: 120px;width: 120px"/></div>
+                            <div class='drag drag-3'>姓名</div>
+                            <div class='drag drag-3'>年龄</div>
+                            <div class='drag drag-3'>爱好</div>
+
+                            <div style="height: 600px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看详情</a>
+</script>
+
+<!--<script src="${ctxPath}/assets/common/js/demo/drag/js/jspdf.js"></script>-->
+<!--<script src="${ctxPath}/assets/common/js/demo/drag/js/jspdf.plugin.addhtml.js"></script>-->
+<!--<script src="${ctxPath}/assets/common/js/demo/drag/js/jspdf.plugin.addimage.js"></script>-->
+
+<script src="${ctxPath}/assets/common/js/demo/drag/jspdf.min.js"></script>
+
+<script src="${ctxPath}/assets/common/js/demo/drag/js/jquery-1.9.1.min.js"></script>
+<script src="${ctxPath}/assets/common/js/demo/drag/js/drag.js"></script>
+<script src="${ctxPath}/assets/common/js/demo/drag/js/html2canvas.min.js"></script>
+@}
+

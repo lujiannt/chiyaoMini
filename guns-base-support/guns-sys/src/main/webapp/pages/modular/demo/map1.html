@@ -1,0 +1,158 @@
+@layout("/common/_container.html",{js:["/assets/modular/demo/map1.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">map1</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="condition" class="layui-input" type="text" placeholder="名称" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                @if(shiro.hasPermission("/demo/del")){
+                                <button id="btnClean" class="layui-btn icon-btn layui-btn-danger"><i class="layui-icon">&#xe67d;</i>清空测试数据</button>
+                                @}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="fengMap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看详情</a>
+</script>
+<script src="${ctxPath}/assets/common/js/demo/fengmap.core.min.js"></script>
+<script src="${ctxPath}/assets/common/js/demo/locSDK.js"></script>
+
+
+<style type="text/css">
+    #fengMap {
+        position: absolute;
+        width: 100%;
+        height: 600px;
+    }
+</style>
+<script>
+    //获取版本号,设置title
+    document.title = '显示定位点V' + fengmap.VERSION;
+
+    //定义全局map变量
+    var map = null;
+    //定义地图ID变量
+    var fmapID = '10347';
+    //地图是否加载完成
+    var mapIsOk = false;
+    //定义定位点marker
+    var locationMarker;
+
+    //运行刷新，重置locationMarker
+    if (locationMarker) {
+        locationMarker = null;
+    }
+
+    if (_update) {
+        stopUpdateLocation();
+    }
+
+    window.onload = function () {
+        //加载地图
+        openMap();
+    };
+
+    /**
+     * 打开地图
+     * */
+    function openMap() {
+        /**
+         * 初始化参数，默认使用在线数据，从蜂鸟视图数据服务器加载模型数据
+         * https://www.fengmap.com/docs/js/v2.6.0/fengmap.FMMap.html
+         **/
+        var mapOptions = {
+            //必要，地图容器
+            container: document.getElementById('fengMap'),
+            //地图数据位置
+            mapServerURL: '/assets/common/js/demo/map1/data/' + fmapID,
+            //主题数据位置
+            mapThemeURL: '/assets/common/js/demo/map1/data/theme',
+            //设置主题
+            defaultThemeName: '2001',
+            //必要，地图应用名称，通过蜂鸟云后台创建
+            appName:'蜂鸟研发SDK_2_0',
+            //开发者申请应用下web服务的key
+            key:'57c7f309aca507497d028a9c00207cf8'
+        };
+
+        //初始化地图对象
+        map = new fengmap.FMMap(mapOptions);
+
+        //打开Fengmap服务器的地图数据和主题
+        map.openMapById(fmapID, function (error) {
+            //打印错误信息
+            console.log(error);
+        });
+
+        //地图加载完成事件
+        map.on('loadComplete', function () {
+            console.log('地图加载完成！');
+            mapIsOk = true;
+        });
+    }
+
+    /**
+     * 这个方法是示例的定位sdk回调，实际根据使用的定位sdk不同，接口名称和方式可能会有差异
+     * */
+    updateLocation(function (data) {
+        if (mapIsOk) {
+            if (!locationMarker) {
+                /**
+                 * fengmap.FMLocationMarker 自定义图片标注对象，为自定义图层
+                 * https://www.fengmap.com/docs/js/v2.6.0/fengmap.FMLocationMarker.html
+                 */
+                locationMarker = new fengmap.FMLocationMarker({
+                    //x坐标值
+                    x: data.x,
+                    //y坐标值
+                    y: data.y,
+                    //图片地址
+                    url: '/assets/common/js/demo/map1/images/location.png',
+                    //楼层id
+                    groupID: 1,
+                    //图片尺寸
+                    size: 48,
+                    //marker标注高度
+                    height: 3,
+                    callback: function () {
+                        //回调函数
+                        console.log('定位点marker加载完成！');
+                    }
+                });
+                //添加定位点marker
+                map.addLocationMarker(locationMarker);
+            } else {
+                //旋转locationMarker
+                locationMarker.rotateTo({
+                    to: data.angle,
+                    duration: 1
+                });
+                //移动locationMarker
+                locationMarker.moveTo({
+                    x: data.x,
+                    y: data.y,
+                    groupID: 1
+                });
+            }
+        }
+    });
+</script>
+@}
